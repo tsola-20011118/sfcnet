@@ -1,0 +1,19 @@
+<div class="loginbg">
+    <div class="talkindexbg">
+        <h1 class="mypagep"><%= @touser.name %></h1>
+        
+            <div class="talkusers">
+                <% for @textData in @messages%>
+                <%= User.find_by(id:@textData.from).name %><%= @textData.message %>
+                <%end%>
+            </div>
+        <form action="" method="GET">
+            <div>
+                <textarea name="message"></textarea>
+            </div>
+            <div>
+                <button>送信</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,1 @@
+document.getElementById("flash").style.fontSize = 20px;

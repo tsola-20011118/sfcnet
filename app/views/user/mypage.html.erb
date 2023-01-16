@@ -1,0 +1,39 @@
+<div class="loginbg">
+    <h1 class="mypagep"><%=@pageuser.name%>'s PAGE</h1>
+    <h1 class="mypagep">名前：<%=@pageuser.name%></h1>
+    <p class="mypagep">年齢：<%=@pageuser.age%></p>
+    <p class="mypagep">メール：<%=@pageuser.mail%></p>
+    <% if @pageuser == @user%>
+    <p class="mypagep">パスワード：<%=@pageuser.passward%></p>
+    <%end%>
+    <p class="mypagep">性別：
+    <%if @pageuser.sex == 1 %>
+    男
+    <%else%>
+    女
+    <%end%>
+    </p>
+    <% if @pageuser == @user%>
+    <div class="userall">
+        <div class="userIndex">
+            <p><%= link_to( "EDIT" ,  "/user/#{@pageuser.id}/edit", class: "matchbutton" )%></p>
+        </div>
+
+        <div class="userIndex">
+            <p><%= link_to( "USER DELETE" ,  "/user/#{@pageuser.id}/destroy", class: "matchbutton" )%></p>
+        </div>
+
+        <div class="userIndex">
+            <p><%= link_to( "LOGOUT" ,  "/user/logout", class: "matchbutton")%></p>
+        </div>
+        
+    </div>
+    
+    <%else%>
+    <div class="userall">
+        <div class="notuserIndex">
+            <p><%= link_to( "MESSAGE" ,  "/user/talk/#{@pageuser.id}", class: "matchbutton")%></p>
+        </div>
+    </div>
+    <%end%>
+</div>

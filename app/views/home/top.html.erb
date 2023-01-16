@@ -1,0 +1,43 @@
+<div class="photo">
+</div>
+<div class="topSelect">
+    <div class="topTaxi">
+        <h1>湘南台からキャンパスへ</h1>
+        <p>あなたのステータス</p>
+        <p>
+        <% if @user == nil%>
+        NONE
+        <%else%>
+            <% if @user.taxi == true%>
+            WAITING
+            <%else%>
+            NOT WAITING
+            <%end%>
+        <%end%>
+        </p>
+        <div class="taxiMenuall">
+            <div class="taxiMenu">
+            <%= link_to( "タクシーを待つ" ,  "../taxi/wait" , class: "menuTaxi" )%>
+            </div>
+            <div class="taxiMenu">
+            <%= link_to( "タクシーを諦める" ,  "../taxi/exit" , class: "menuTaxi" )%>
+            </div>
+            <div class="taxiMenu">
+            <%= link_to( "待っている人を探す" ,  "../taxi/waiting" , class: "menuTaxi" )%>
+            </div>
+            <div class="taxiMenu">
+            <%= link_to( "承認する" ,  "../taxi/check" , class: "menuTaxi" )%>
+            </div>
+        </div>
+    </div>
+    <div class="topTaxi">
+        <p>タクシーはこちらから</p>
+        <%= link_to( "タクシー" ,  "../taxi"  )%>
+    </div>
+    <div class="topTaxi">
+        <p>タクシーはこちらから</p>
+        <%= link_to( "タクシー" ,  "../taxi"  )%>
+    </div>
+</div>
+
+

@@ -1,0 +1,19 @@
+<div class="loginbg matchbg">
+    <h1><%= @touser.name %></h1>
+    <h3>年齢：<%= .age %></h3>
+    <h3>性別：<%if @touser.sex == 1 %>
+    男
+    <%else%>
+    女
+    <%end%></h3>
+    <div class="matchindex">
+        <div class="matchPeople">
+            <p><%= link_to( "見に行ってみる！" ,  "/user/#{params[:id]}" , class: "matchbutton" )%></p>
+        </div>
+
+        <div class="matchPeople">
+            <p><%= link_to( "一緒に行く！" ,  "/taxi/match/#{params[:id]}" , class: "matchbutton" )%></p>
+        </div>
+        
+    </div>
+</div>

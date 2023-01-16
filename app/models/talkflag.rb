@@ -1,0 +1,2 @@
+class Talkflag < ApplicationRecord
+end

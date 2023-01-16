@@ -1,0 +1,11 @@
+<div class="loginbg">
+    <div class="talkindexbg">
+        <h1 class="mypagep">MESSAGE PAGE</h1>
+        <div class="talkusers">
+            <%for user in @users%>
+            <%@index = User.find_by(id: user)%>
+            <%= link_to "#{@index.name}", "/user/#{@index.id}", class: "talkinuserslink" %><%= link_to "MESSAGE PAGE", "/user/talk/#{@index.id}", class: "talkuserslink" %>
+            <%end%>
+        </div>
+    </div>
+</div>

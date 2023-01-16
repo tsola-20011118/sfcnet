@@ -1,0 +1,2 @@
+class Taxiconnect < ApplicationRecord
+end

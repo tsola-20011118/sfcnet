@@ -1,0 +1,30 @@
+<div class="editerbg">
+    <div class="editbg">
+    <h1 class="mypagep"><%=@user.name%>'s PAGE</h1>
+        <form action="editer" method="GET">
+        <div>
+        <label for="name">名前</label>
+        <input name="name" value="<%=@user.name%>">
+        </div>
+        <div>
+        <label for="age">年齢</label>
+        <input name="age" value="<%=@user.age%>">
+        </div>
+        <div>
+        <label for="mail">メールアドレス</label>
+        <input name="mail" value="<%=@user.mail%>">
+        </div>
+        <div>
+        <label for="passward">パスワード</label>
+        <input name="passward" value="<%=@user.passward%>">
+        </div>
+        <div>
+        <label for="sex">性別（女０、男１）</label>
+        <input name="sex" value="<%=@user.sex%>">
+        </div>
+        <div>
+        <button>登録</button>
+        </div>
+        </form>
+    </div>
+</div>
