@@ -20,11 +20,11 @@ Rails.application.routes.draw do
   get "taxi/wait" => "taxi#wait" #待機状態にする、画面表示なし
   # get "taxi" => "taxi#taxi"　使わない？
 
-  get "home/contact" => "home#contact"
-  get "home/top" => "home#top"
+  get "home/contact" => "home#contact"#contactページ
+  get "home/top" => "home#top" #topページ
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
   # root "articles#index"
-  get "/" => "home#top"
+  get "/" => "home#top" #topページ
 end
