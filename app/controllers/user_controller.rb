@@ -5,6 +5,9 @@ class UserController < ApplicationController
   end
 
   def logined
+    if @user
+      redirect_to "/user/login" and return;
+    end
     #入力のない項目があったら
     # if params[:password]
     #   flash[:error] = "パスワードを入力してください"
@@ -58,6 +61,10 @@ class UserController < ApplicationController
 
   def mypage
     @pageuser = User.find_by(id: params[:id]);
+    if !@pageuser
+      flash[:error] = "存在しないページです";
+      redirect_to("/home/top");
+    end
   end
 
   def edit
@@ -69,8 +76,8 @@ class UserController < ApplicationController
   end
 
   def editer
-    #ログインユーザーがいない時の処理
-    if session[:id] == nil
+    #不正アクセス時
+    if session[:id] == nil || @user.id != params[:id].to_i
       flash[:error] = "不正なアクセスを検出しました";
       redirect_to "/home/top" and return;
     else
@@ -95,7 +102,7 @@ class UserController < ApplicationController
 
   def destroy
     #不正アクセス時
-    if session[:id] == nil || User.find_by(id: params[:id]).id != @user.id
+    if session[:id] == nil || params[:id].to_i != @user.id
       flash[:error] = "不正なアクセスを検出しました";
     else
       session[:id] = nil;
@@ -115,11 +122,10 @@ class UserController < ApplicationController
     else
       #params[:id]のidのUserを@touserに格納
       @touser = User.find_by(id: params[:id]);
-      #どちらも誘い合っている時のTaxiconnect削除（この時マッチングしている）
-      if Taxiconnect.find_by(to:params[:id], from:session[:id]) && Taxiconnect.find_by(from:params[:id], to:session[:id])
-        Taxiconnect.find_by(to:@user, from:@touser.id).destroy;
-        Taxiconnect.find_by(to:@touser, from:@user.id).destroy;
-        flash[:error] = "マッチングしました！待ち合わせ場所を決めましょう！"
+      #存在しないUserにアクセスした時
+      if @touser == nil
+        flash[:error] = "存在しないページです";
+        redirect_to "/home/top" and return;
       end
       #User.idの小さい方をfirst,大きい方をsecondとする
       if @touser.id > @user.id
@@ -130,6 +136,16 @@ class UserController < ApplicationController
         @second = @user.id;
       end
       @talkflag = Talkflag.find_by(first: @first, second:@second);
+      if !Taxiconnect.find_by(to:params[:id], from:session[:id]) && !Taxiconnect.find_by(from:params[:id], to:session[:id]) && !@talkflag
+        flash[:error] = "アクセスできないユーザーです";
+        redirect_to "/home/top" and return;
+      end
+      #どちらも誘い合っている時のTaxiconnect削除（この時マッチングしている）
+      if Taxiconnect.find_by(to:params[:id], from:session[:id]) && Taxiconnect.find_by(from:params[:id], to:session[:id])
+        Taxiconnect.find_by(to:@user, from:@touser.id).destroy;
+        Taxiconnect.find_by(to:@touser, from:@user.id).destroy;
+        flash[:error] = "マッチングしました！待ち合わせ場所を決めましょう！"
+      end
       #既にTalkflagがあるとき（これまでにマッチングしたことがある）チャット画面を表示
       if @talkflag
         @flag = @talkflag.id;
