@@ -1,16 +1,16 @@
 Rails.application.routes.draw do
 
-  get "user/talk/index" => "user#talkindex" #0,
-  get "user/talk/:id" => "user#talk" #0
-  get "user/logout" => "user#logout" #0
-  get "user/new" => "user#new" #0
-  get "user/create" => "user#create" #0（テンプレートなし）
-  get 'user/login' => "user#login"
-  get 'user/logined'
-  get "user/:id/editer" => "user#editer"
-  get "user/:id/edit" => "user#edit"
-  get "user/:id/destroy" => "user#destroy"
-  get "user/:id" => "user#mypage"
+  get "user/talk/index" => "user#talkindex" #しゃべっている人一覧画面
+  get "user/talk/:id" => "user#talk" #:idの人とのトーク画面
+  get "user/logout" => "user#logout" #ログアウト
+  get "user/new" => "user#new" #新規登録画面
+  get "user/create" => "user#create" #画面表示なし
+  get 'user/login' => "user#login" #login入力画面
+  get 'user/logined'#画面表示なし
+  get "user/:id/editer" => "user#editer" #画面表示なし
+  get "user/:id/edit" => "user#edit" #編集画面
+  get "user/:id/destroy" => "user#destroy" #ユーザー情報削除
+  get "user/:id" => "user#mypage" #ユーザー情報表示ページ
 
   get "taxi/exit" => "taxi#exit"
   get "taxi/check" => "taxi#check"
