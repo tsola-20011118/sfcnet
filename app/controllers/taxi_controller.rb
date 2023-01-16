@@ -72,10 +72,10 @@ class TaxiController < ApplicationController
             Taxiconnect.where(from:@user.id).or(Taxiconnect.where(to:@user.id)).each{|temp|
                 temp.destroy
             }
-        # else
-        #     flash[:error] = "ログインしてください"
+        else
+            flash[:error] = "ログインしてください"
         end
-        redirect_to("/home/top");
+        redirect_to("/user/login");
     end
 
 end

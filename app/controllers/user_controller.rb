@@ -47,7 +47,7 @@ class UserController < ApplicationController
 
   def create
     #新規User　作成
-    @user = User.new(name: rams[:name], age: params[:age], mail: params[:mail], passward: params[:passward], sex: params[:sex], taxi: false);
+    @user = User.new(name: params[:name], age: params[:age], mail: params[:mail], passward: params[:passward], sex: params[:sex], taxi: false);
     @user.save
     #もし登録がうまく行ったら
     if @user.save
