@@ -1,1 +1,3 @@
-ssss
+<%for @users in @usersid%>
+<%=User.find_by(id: @users).name%><%= link_to "一緒に行く", "/taxi/checkD/#{User.find_by(id: @users).id}", class: " menu" %>
+<%end%>

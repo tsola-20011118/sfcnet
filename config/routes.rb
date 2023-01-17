@@ -13,7 +13,8 @@ Rails.application.routes.draw do
   get "user/:id" => "user#mypage" #ユーザー情報表示ページ
 
   get "taxi/exit" => "taxi#exit" #タクシーを諦めるページ
-  get "taxi/check" => "taxi#check"#誘われた人から承認するページ（未完成,未検証）
+  get "taxi/checkD/:id" => "taxi#checkD"#誘われた人から承認したあとのページ（未完成,未検証）
+  get "taxi/check" => "taxi#check"#誘われた人から承認するページ
   get "taxi/match/:id" => "taxi#match" #誘うか確定した後のページ
   get "taxi/connect/:id" => "taxi#connect" #誘うか選択するページ
   get "taxi/waiting" => "taxi#waiting" #待機している人一覧の表示ページ
@@ -27,4 +28,6 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
   get "/" => "home#top" #topページ
+
+  
 end

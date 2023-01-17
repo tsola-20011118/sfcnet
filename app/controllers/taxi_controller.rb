@@ -86,6 +86,38 @@ class TaxiController < ApplicationController
         redirect_to "/home/top" and return;
     end
 
+    def check
+        if !@user
+            flash[:error] = "ログインしてください"
+            redirect_to "/user/login" and return;
+        end
+        @usersid = [];
+        @connectUser = Taxiconnect.where(to: @user.id).order(created_at: :desc).limit(5);
+        for index in @connectUser
+            @usersid.push(index.from);
+        end
+    end
+
+    def checkD
+        #ログインユーザーがいない時の処理
+        if !@user
+            flash[:error] = "ログインしてください"
+            redirect_to "/user/login" and return;
+        end
+        @touser = User.find_by(id: params[:id]);
+        #不正アクセス処理
+        if !@touser
+            flash[:error] = "存在しないページです"
+            redirect_to "/home/top" and return;
+        end
+        if !Taxiconnect.find_by(to: @user.id, from:@touser.id)
+            flash[:error] = "不正なアクセスです"
+            redirect_to "/home/top" and return;
+        end
+        Taxiconnect.new(to: @touser.id, from:@user.id).save;
+        redirect_to "/user/talk/#{@touser.id}"
+    end
+
 end
 
 

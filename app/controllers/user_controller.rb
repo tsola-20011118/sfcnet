@@ -136,6 +136,7 @@ class UserController < ApplicationController
         @second = @user.id;
       end
       @talkflag = Talkflag.find_by(first: @first, second:@second);
+      #エラー処理
       if !Taxiconnect.find_by(to:params[:id], from:session[:id]) && !Taxiconnect.find_by(from:params[:id], to:session[:id]) && !@talkflag
         flash[:error] = "アクセスできないユーザーです";
         redirect_to "/home/top" and return;
@@ -144,6 +145,10 @@ class UserController < ApplicationController
       if Taxiconnect.find_by(to:params[:id], from:session[:id]) && Taxiconnect.find_by(from:params[:id], to:session[:id])
         Taxiconnect.find_by(to:@user, from:@touser.id).destroy;
         Taxiconnect.find_by(to:@touser, from:@user.id).destroy;
+        @user.taxi = false;
+        @user.save;
+        @touser.taxi = false;
+        @touser.save;
         flash[:error] = "マッチングしました！待ち合わせ場所を決めましょう！"
       end
       #既にTalkflagがあるとき（これまでにマッチングしたことがある）チャット画面を表示
