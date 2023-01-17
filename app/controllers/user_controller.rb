@@ -143,8 +143,10 @@ class UserController < ApplicationController
       end
       #どちらも誘い合っている時のTaxiconnect削除（この時マッチングしている）
       if Taxiconnect.find_by(to:params[:id], from:session[:id]) && Taxiconnect.find_by(from:params[:id], to:session[:id])
-        Taxiconnect.find_by(to:@user, from:@touser.id).destroy;
-        Taxiconnect.find_by(to:@touser, from:@user.id).destroy;
+        @temp = Taxiconnect.where(to:@user).or(Taxiconnect.where(from:@user.id)).or(Taxiconnect.where(from:@touser.id)).or(Taxiconnect.where(to:@touser.id));
+        @temp.each {|des|
+          des.destroy;
+        }
         @user.taxi = false;
         @user.save;
         @touser.taxi = false;
@@ -163,6 +165,7 @@ class UserController < ApplicationController
         end
       else #Talkflagがない時talkflagを作る
         Talkflag.new(first: @first, second:@second).save;
+        @messages = (Talk.where(flag: @flag).order(created_at: :desc).limit(5));
       end
     end
   end
