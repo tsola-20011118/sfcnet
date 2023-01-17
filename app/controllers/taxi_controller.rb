@@ -31,10 +31,13 @@ class TaxiController < ApplicationController
         if session[:id] == nil
             flash[:error] = "ログインしてください";
             redirect_to "/user/login" and return;
-        else
-            #touser
-            @touser = User.find_by(id: params[:id]);
         end
+        #不正アクセスの場合
+        if !User.find_by(id: params[:id]) || User.find_by(id: params[:id]).taxi == false
+            flash[:error] = "存在しないページです";
+            redirect_to "/home/top" and return;
+        end
+        @touser = User.find_by(id: params[:id]);
     end
 
     def match
@@ -42,22 +45,26 @@ class TaxiController < ApplicationController
         if session[:id] == nil
             flash[:error] = "ログインしてください";
             redirect_to "/user/login" and return;
-        else
-            #誘ったことがない時の誘う処理
-            if Taxiconnect.find_by(to:params[:id], from:session[:id]) == nil
-                #ログインユーザー->該当ユーザーのTaxiconnectの作成
-                Taxiconnect.new(to:params[:id], from:session[:id]).save;
-                #相手からも誘われていた時->/user/talkに移行（チャット画面）
-                if Taxiconnect.find_by(to:params[:id], from:session[:id]) && Taxiconnect.find_by(from:params[:id], to:session[:id])
-                    redirect_to "/user/talk/#{params[:id]}" and return;
-                else #相手から誘われていない時->承認待ちの状態で/home/topに移行
-                    flash[:error] = "承認待ちです"
-                    redirect_to "/taxi/waiting" and return;
-                end
-            else #誘ったことがある時/home/topに移行
-                flash[:error] = "既に誘っています"
+        end
+        #不正アクセスの場合
+        if !User.find_by(id: params[:id]) || User.find_by(id: params[:id]).taxi == false
+            flash[:error] = "存在しないページです";
+            redirect_to "/home/top" and return;
+        end
+        #誘ったことがない時の誘う処理
+        if Taxiconnect.find_by(to:params[:id], from:session[:id]) == nil
+            #ログインユーザー->該当ユーザーのTaxiconnectの作成
+            Taxiconnect.new(to:params[:id], from:session[:id]).save;
+            #相手からも誘われていた時->/user/talkに移行（チャット画面）
+            if Taxiconnect.find_by(to:params[:id], from:session[:id]) && Taxiconnect.find_by(from:params[:id], to:session[:id])
+                redirect_to "/user/talk/#{params[:id]}" and return;
+            else #相手から誘われていない時->承認待ちの状態で/home/topに移行
+                flash[:error] = "承認待ちです"
                 redirect_to "/taxi/waiting" and return;
             end
+        else #誘ったことがある時/home/topに移行
+            flash[:error] = "既に誘っています"
+            redirect_to "/taxi/waiting" and return;
         end
 
     end
@@ -74,8 +81,9 @@ class TaxiController < ApplicationController
             }
         else
             flash[:error] = "ログインしてください"
+            redirect_to "/user/login" and return;
         end
-        redirect_to("/user/login");
+        redirect_to "/home/top" and return;
     end
 
 end
