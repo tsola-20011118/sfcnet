@@ -50,7 +50,7 @@ class UserController < ApplicationController
 
   def create
     #新規User　作成
-    @user = User.new(name: params[:name], age: params[:age], mail: params[:mail], passward: params[:passward], sex: params[:sex], taxi: false, rtaxi: false);
+    @user = User.new(name: params[:name], age: params[:age], mail: params[:mail], passward: params[:passward], sex: params[:sex], taxi: false, rtaxi: false, talknum: 0, talktempnum: 0);
     @user.save
     #もし登録がうまく行ったら
     if @user.save
@@ -165,6 +165,12 @@ class UserController < ApplicationController
         end
       else #Talkflagがない時talkflagを作る
         Talkflag.new(first: @first, second:@second).save;
+        @user.talknum = @user.talknum + 1;
+        @user.talktempnum = @user.talktempnum + 1;
+        @user.save;
+        @touser.talknum = @touser.talknum + 1;
+        @touser.save;
+
         @messages = (Talk.where(flag: @flag).order(created_at: :desc).limit(5));
       end
     end
