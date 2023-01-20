@@ -1,0 +1,3 @@
+<%for @users in @usersid%>
+<%= link_to "#{User.find_by(id: @users).name}と一緒に行く", "/rtaxi/checkD/#{User.find_by(id: @users).id}", class: " menu" %>
+<%end%>

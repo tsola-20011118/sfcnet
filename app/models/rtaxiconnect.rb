@@ -1,0 +1,2 @@
+class Rtaxiconnect < ApplicationRecord
+end

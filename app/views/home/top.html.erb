@@ -31,8 +31,33 @@
         </div>
     </div>
     <div class="topTaxi">
-        <p>タクシーはこちらから</p>
-        <%= link_to( "タクシー" ,  "../taxi"  )%>
+        <h1>キャンパスから湘南台へ</h1>
+        <p>あなたのステータス</p>
+        <p>
+        <% if @user == nil%>
+        NONE
+        <%else%>
+            <% if @user.rtaxi == true%>
+            WAITING
+            <%else%>
+            NOT WAITING
+            <%end%>
+        <%end%>
+        </p>
+        <div class="taxiMenuall">
+            <div class="taxiMenu">
+            <%= link_to( "タクシーを待つ" ,  "../rtaxi/wait" , class: "menuTaxi" )%>
+            </div>
+            <div class="taxiMenu">
+            <%= link_to( "タクシーを諦める" ,  "../rtaxi/exit" , class: "menuTaxi" )%>
+            </div>
+            <div class="taxiMenu">
+            <%= link_to( "待っている人を探す" ,  "../rtaxi/waiting" , class: "menuTaxi" )%>
+            </div>
+            <div class="taxiMenu">
+            <%= link_to( "承認する" ,  "../rtaxi/check" , class: "menuTaxi" )%>
+            </div>
+        </div>
     </div>
     <div class="topTaxi">
         <p>タクシーはこちらから</p>

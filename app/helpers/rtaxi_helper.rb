@@ -1,0 +1,2 @@
+module RtaxiHelper
+end

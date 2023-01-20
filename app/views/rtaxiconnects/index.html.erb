@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Rtaxiconnects</h1>
+
+<div id="rtaxiconnects">
+  <% @rtaxiconnects.each do |rtaxiconnect| %>
+    <%= render rtaxiconnect %>
+    <p>
+      <%= link_to "Show this rtaxiconnect", rtaxiconnect %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New rtaxiconnect", new_rtaxiconnect_path %>
