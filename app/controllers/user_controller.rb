@@ -46,17 +46,23 @@ class UserController < ApplicationController
   end
 
   def new
+    
   end
 
   def create
     #新規User　作成
-    @user = User.new(name: params[:name], age: params[:age], mail: params[:mail], passward: params[:passward], sex: params[:sex], taxi: false, rtaxi: false, talknum: 0, talktempnum: 0);
+    @user = User.new(name: params[:name], age: params[:age], mail: params[:mail], passward: params[:password], sex: params[:sex], taxi: false, rtaxi: false, talknum: 0, talktempnum: 0);
+    if @user.age != nil
+      flash[:error] = "通るよ！";
+    end
     @user.save
     #もし登録がうまく行ったら
+    
     if @user.save
       session[:id] = @user.id;
       redirect_to("/user/#{session[:id]}");
     end
+    flash[:error] = "通るよ！"
   end
 
   def mypage
@@ -85,7 +91,7 @@ class UserController < ApplicationController
       @user.name = params[:name];
       @user.age = params[:age];
       @user.mail = params[:mail];
-      @user.passward = params[:passward];
+      @user.passward = params[:password];
       @user.sex = params[:sex];
       @user.save
       if @user.save

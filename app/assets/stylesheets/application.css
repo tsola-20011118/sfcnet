@@ -22,7 +22,53 @@ body {
     position: relative;
 }
 
+.flash{
+    display: table;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10%;
+    background-color: #576f72;
+    animation-name: fadeUpAnime;
+    animation-duration: 2s;
+    opacity: 1;
+    z-index: 20;
+}
+
+.flash a{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    color: #ffffff;
+    text-decoration: none;
+    
+}
+
+@keyframes fadeUpAnime {
+    from {
+        opacity: 0;
+        transform: translateY(-20%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.flash p{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    font-size: medium;
+    color: #fff;
+}
+
 #header {
+    position: fixed;
+    top: 0;
+    left: 10%;
     width: 80%;
     height: 7%;
     color: #000000;
@@ -32,6 +78,7 @@ body {
     display: flex;
     align-items: flex-end;
     font-size: 130%;
+    z-index: 10;
 }
 
 .menuLeft{
@@ -67,4 +114,390 @@ body {
 .menuRightLink:hover,
 .menuLeftLink:hover{
     color: #576F72;
+}
+
+.top {
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.topImage {
+    max-width: 100%;
+    min-height: 100%;
+    z-index: -10;
+    filter: blur(1px);
+    opacity: 0.7;
+}
+
+.topAll {
+    font-family: "HiraMinProN-W3" !important;
+    position: fixed;
+    top: 7%;
+    left: 10%;
+    background-color: rgb(255, 255, 255, 0.6);
+    width: 80%;
+    height: 93%;
+}
+
+.topTaxiMenu {
+    position: fixed;
+    top: 35%;
+    left: 10%;
+    width: 78%;
+    height: 30%;
+    margin: 1%;
+    border: thin solid #576f72;
+    padding: 0
+}
+
+.topTaxiMenuDiv {
+    width: 50%;
+    height: 100%;
+    float: left;
+    font-size: xx-large;
+    display: table;
+}
+
+.topTaxiMenuSelect {
+    width: 100%;
+    height: 25%;
+    text-align: center;
+}
+
+.topTaxiMenuSelect:hover {
+    background-color: rgb(87, 111, 114, 0.5);
+}
+
+.topTaxiMenuSelect:hover a {
+    color: #ffffff;
+}
+
+.topTaxiMenuSelect a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.topTaxiMenuExplain {
+    width: 50%;
+    height: 100%;
+    float: left;
+    text-align: center;
+    font-size: xx-large;
+}
+
+.topRtaxiMenu {
+    position: fixed;
+    top: 66%;
+    left: 10%;
+    width: 78%;
+    height: 30%;
+    margin: 1%;
+    border: thin solid #576f72;
+}
+
+/* user/login*/
+
+.loginAll {
+    font-family: "ヒラギノ明朝 ProN" !important;
+    position: fixed;
+    top: 25%;
+    left: 25%;
+    background-color: rgb(255, 255, 255, 0.6);
+    width: 50%;
+    height: 70%;
+}
+
+.loginFormInto {
+    width: 80%;
+    height: 75%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.loginButton {
+    width: 100%;
+    height: 22%;
+}
+
+
+.topLoginSelectTop {
+    width: 49%;
+    height: 98%;
+    text-align: center;
+    font-size: x-large;
+    display: table;
+    border: thin solid #576f72;
+    background-color: #ffffff85;
+    font-family: "Courier New";
+    float: left;
+    margin-right: 1.7%;
+}
+
+.topLoginSelectDown {
+    width: 49%;
+    height: 100%;
+    text-align: center;
+    font-size: x-large;
+    display: table;
+    border: thin solid #576f72;
+    background-color: #ffffff85;
+    font-family: "Courier New";
+}
+
+.topLoginSelectDown a,
+.topLoginSelectTop a {
+    color: inherit;
+    text-decoration: none;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+
+}
+
+.topLoginSelectTop:hover,
+.topLoginSelectDown:hover {
+    background-color: rgb(87, 111, 114, 0.5);
+}
+
+.topLoginSelectTop:hover a,
+.topLoginSelectDown:hover a {
+    color: #ffffff;
+}
+
+.loginIn {
+    font-size: xx-large;
+}
+
+.loginFormLabel {
+    width
+}
+
+.cp_iptxt {
+    position: relative;
+    width: 80%;
+    margin: 2% auto;
+}
+
+.loginFormInto p {
+    font-size: small;
+}
+
+.cp_iptxt input[type='text'] {
+    font: 15px/24px sans-serif;
+    box-sizing: border-box;
+    width: 100%;
+    letter-spacing: 1px;
+    padding-left: 4em;
+}
+
+.cp_iptxt input[type='text']:focus {
+    outline: none;
+}
+
+.cp_iptxt input[type='password'] {
+    font: 15px/24px sans-serif;
+    box-sizing: border-box;
+    width: 100%;
+    letter-spacing: 1px;
+    padding-left: 4em;
+}
+
+.cp_iptxt input[type='password']:focus {
+    outline: none;
+}
+
+.ef {
+    padding: 7px 14px;
+    transition: 0.4s;
+    border: 1px solid #576f729b;
+    background: transparent;
+}
+
+.ef~.focus_line:before,
+.ef~.focus_line:after {
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    content: '';
+    transition: 0.4s;
+    background-color: #576f72;
+}
+
+.ef~.focus_line:after {
+    top: auto;
+    bottom: 0;
+}
+
+.ef~.focus_line i:before,
+.ef~.focus_line i:after {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 2px;
+    height: 0;
+    content: '';
+    transition: 0.6s;
+    background-color: #576f72;
+}
+
+.ef~.focus_line i:after {
+    right: 0;
+    left: auto;
+}
+
+.ef:focus~.focus_line:before,
+.ef:focus~.focus_line:after,
+.cp_iptxt.ef~.focus_line:before,
+.cp_iptxt.ef~.focus_line:after {
+    left: 0;
+    width: 100%;
+    transition: 0.4s;
+}
+
+.ef:focus~.focus_line i:before,
+.ef:focus~.focus_line i:after,
+.cp_iptxt.ef~.focus_line i:before,
+.cp_iptxt.ef~.focus_line i:after {
+    top: -1px;
+    height: 100%;
+    transition: 0.6s;
+}
+
+.ef~label {
+    position: absolute;
+    z-index: -1;
+    top: 10px;
+    left: 14px;
+    width: 100%;
+    transition: 0.3s;
+    letter-spacing: 0.5px;
+    color: #576f726a;
+}
+
+.ef:focus~label,
+.cp_iptxt.ef~label {
+    font-size: 12px;
+    top: -18px;
+    left: 0;
+    transition: 0.3s;
+    color: #576f72;
+}
+
+.cp_ipradio {
+    position: relative;
+    width: 80%;
+    margin: 5% auto;
+}
+
+.cp_ipradio input[type='radio'] {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+
+.cp_ipradio label {
+    position: relative;
+    display: inline-block;
+    margin-right: 30px;
+    padding-right: 10px;
+    padding-left: 35px;
+    cursor: pointer;
+}
+
+.cp_ipradio label::before {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 24px;
+    height: 24px;
+    content: ' ';
+    border: 2px solid #576F72;
+    border-radius: 4px;
+}
+
+.cp_ipradio input[type='radio']+label::before {
+    border-radius: 18px;
+}
+
+.cp_ipradio input[type='radio']:checked+label {
+    padding-left: 10px;
+    color: #ffffff;
+}
+
+.cp_ipradio input[type='radio']:checked+label::before {
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #576F72;
+}
+
+/* Transition */
+.cp_ipradio label,
+.cp_ipradio label::before {
+    -webkit-transition: 0.25s all ease;
+    transition: 0.25s all ease;
+}
+
+.waitingAll {
+    height: 100%;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.waitingExplain {
+    height: 40%;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.waitingPeople {
+    height: 50%;
+    width: 100%;
+    margin: 0 auto;
+    overflow: auto;
+    border: thin solid #576f72;
+    background-color: #00000025;
+}
+
+.waitingParams {
+    height: 20%;
+    width: 80%;
+    margin: 1% auto;
+    border: thin solid #576f72;
+}
+
+.waitingUser {
+    height: 100%;
+    width: 50%;
+    float: left;
+    text-align: center;
+}
+
+.waitingUser p {
+    font-size: x-large;
+}
+
+.waitingUserLink {
+    background-color: #576f724d;
+}
+
+.waitingUserLink a,
+.waitingUser a {
+    color: inherit;
+    text-decoration: none;
+    font-size: xx-large;
+
+}
+
+.waitingUserLink:hover a {
+    color: #ffffff;
+}
+
+.waitingUserLink:hover {
+    background-color: #576f728f;
 }

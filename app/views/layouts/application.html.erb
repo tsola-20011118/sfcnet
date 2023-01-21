@@ -10,23 +10,26 @@
     <%= javascript_importmap_tags %>
   </head>
   <body>
-    <div>
-      <%if flash[:error] !=nil%>
-        <div oneclick="flash()" id="flash">
-          <p><%=flash[:error] %></p>
-        </div>
-      <%end%>
-    </div>
-    <div id ="header">
+    <%if flash[:error] !=nil%>
+      <div class="flash">
+        <%=link_to "#{flash[:error]}(クリックするとリロードします)" , "" , class: "" %>
+      </div>
+    <%end%>
+    <div id="header">
       <div class="menuLeft">　<%=link_to "CONTACT" , "/home/contact" , class: "menuLeftLink" %></div>
       <div class="menuCenter"><%=link_to "SFC NETWORK" , "/home/top" , class: "menuCenterLink" %></div>
       <%if session[:id] !=nil %>
         <div class="menuRight"><%=link_to "#{@user.name}'sPAGE" , "/user/#{session[:id]}" , class: "menuRightLink" %>　<%=link_to "MESSAGE" , "/user/talk/index" , class: "menuRightLink" %>　</div>
       <%else%>
+        
         <div class="menuRight"><%=link_to "RESISTER" , "/user/new" , class: "menuRightLink" %>　<%=link_to "LOGIN" , "/user/login" , class: "menuRightLink" %>　</div>
     <%end%>
     </div>
-    <div class="pos">
+    <div class="top">
+      <%= image_tag 'sfc.jpeg', class:'topImage' %>
+      <%if @user == nil%>
+        <div class="br"></div>
+      <%end%>
       <%= yield %>
     </div>
   </body>

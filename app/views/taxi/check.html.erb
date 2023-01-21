@@ -1,3 +1,21 @@
-<%for @users in @usersid%>
-<%= link_to "#{User.find_by(id: @users).name}と一緒に行く", "/taxi/checkD/#{User.find_by(id: @users).id}", class: " menu" %>
-<%end%>
+
+<div class="topAll">
+    <div class="waitingAll">
+        <div class="waitingExplain">
+        </div>
+        <div class="waitingPeople">
+            <%for @users in @usersid%>
+                <%if @users !=session[:id]%>
+                    <div class="waitingParams">
+                        <div class="waitingUser">
+                            <p><%= User.find_by(id:@users).name%></p>
+                        </div>
+                        <div class="waitingUser waitingUserLink">
+                            <%= link_to "一緒に行く!", "/taxi/checkD/#{User.find_by(id: @users).id}", class: " menu" %>
+                        </div>
+                    </div>
+                <%end%>
+            <%end%>
+        </div>
+    </div>
+</div>

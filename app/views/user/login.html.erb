@@ -1,17 +1,21 @@
-<div class="loginbg">
-    <h1>ログインフォーム</h1>
-    <div class="loginbg loginform">
-    <form action="logined" method="GET">
-        <div>
-        <label for="mail">メールアドレス</label>
-        <input name="mail" value="">
+<form class="loginAll" action="logined" method="GET">
+    <div class="loginFormInto">
+        <h1>ログインフォーム</h1>
+        <div class="cp_iptxt">
+            <input class="ef" name="mail" type="text" placeholder="">
+            <label for="mail">メールアドレス</label>
+            <span class="focus_line"><i></i></span>
         </div>
-        <div>
-        <label for="password">パスワード</label>
-        <input name="password" type="password" value="">
+        <div class="cp_iptxt">
+            <input class="ef" name="password" type="password" placeholder="">
+            <label for="password">パスワード</label>
+            <span class="focus_line"><i></i></span>
+            
         </div>
-        <button>ログイン</button>
-        </div>
-    </form>
+        <p>必ず全ての項目を入力してください</p>
     </div>
-</div>
+    <div class="loginButton">
+        <div class="topLoginSelectTop"><%= link_to( "RESISTER" , "/user/new" , class: "" )%></div>
+        <button class="topLoginSelectDown">LOGIN</button>
+    </div>
+</form>

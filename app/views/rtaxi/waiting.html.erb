@@ -1,14 +1,20 @@
-
-
-<div class="loginbg">
-    <h1>タクシーを待っている人</h1>
-    <div class="waitindex">
-        <div class="waitPeople">
+<div class="topAll">
+    <div class="waitingAll">
+        <div class="waitingExplain">
+        </div>
+        <div class="waitingPeople">
             <%for @taxi in @waiting_user%>
-                <%if @taxi.id != session[:id]%>
-                <p><span class="waitname"><%= @taxi.name%></span><%= link_to( "誘う？" ,  "/rtaxi/connect/#{@taxi.id}" , class: "waitcontact" )%></p>
+                <%if @taxi.id !=session[:id]%>
+                    <div class="waitingParams">
+                        <div class="waitingUser">
+                            <p><%= @taxi.name%></p>
+                        </div>
+                        <div class="waitingUser waitingUserLink">
+                            <%= link_to( "さそう？" , "/taxi/connect/#{@taxi.id}" , class: "waitcontact" )%>
+                        </div>
+                    </div>
                 <%end%>
             <%end%>
-        <div>
+        </div>
     </div>
 </div>

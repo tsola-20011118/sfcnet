@@ -20,7 +20,7 @@ class TaxiController < ApplicationController
     def waiting
         if @user != nil
             #taxi == trueの人を直近５人@waitinguserに入れる
-            @waiting_user = User.where(taxi: true).limit(5);
+            @waiting_user = User.where(taxi: true);
         else #ログインユーザーがいない時の処理
             flash[:error] = "ログインしてください"
             redirect_to("/user/login");
@@ -93,7 +93,7 @@ class TaxiController < ApplicationController
             redirect_to "/user/login" and return;
         end
         @usersid = [];
-        @connectUser = Taxiconnect.where(to: @user.id).order(created_at: :desc).limit(5);
+        @connectUser = Taxiconnect.where(to: @user.id).order(created_at: :desc);
         for index in @connectUser
             @usersid.push(index.from);
         end
