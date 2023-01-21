@@ -14,280 +14,57 @@
  *= require_self
  */
 
-html{
-    height: 100%;
-    font-family: 'Impact';
-}
-
+html,
 body {
-    position: relative;
     height: 100%;
     margin: 0;
     /* overflow: hidden; */
-    color: #820000;
+    position: relative;
 }
 
-#flash{
-    background-color: rgb(130, 0, 0, 0.5);
-    position: absolute;
-    top: 0;
-    height: 10%;
-    width: 100%;
-    text-align: center;
-    font-size: 30px;
-    color:#ffffff;
-}
-
-.header {
-    background-color: #4E6C50;
-    margin: 0 auto;
-    height: 10%;
-    width: 100%;
-    display: flex;
-}
-
-.logoImage {
-    height: 100%;
-}
-
-.menuTop {
-    text-align: center;
-    margin: auto 1%;
-    width: 70%;
-    color:inherit;
-    text-decoration: none;
-    font-size: 50px;
-}
-
-.menu {
-    float: right;
-    margin: 3% 1% auto 1%;
-    color:inherit;
-    text-decoration: none;
-    font-size: 30px;
-}
-
-.menu:hover {
-    color: #ffffff;
-}
-
-
-.pos {
-    background-color: #ffffff;
-    margin: 0 auto;
-    height: 90%;
-}
-
-.photo {
-    background-color: #ffffff;
-    height: 50%;
-}
-
-.loginbg {
-    background-color: #F2DEBA;
-    margin: 5% auto;
+#header {
     width: 80%;
-    height: 80%;
-    font-size: 35px;
-}
-
-.loginbg h1{
-    font-size: 40px;
-    text-align: center;
-    padding: 2%;
-}
-
-.loginform {
-    background-color:rgb(0,0,0,0);
-    width: 60%;
-}
-
-.loginform span {
-    font-size: 20px;
-}
-
-.newbutton{
-    text-align: center;
-    font-size: 15px;
-}
-
-.topSelect {
+    height: 7%;
+    color: #000000;
+    font-family: "Courier New";
+    border-bottom: thin solid #576f72;
+    margin: 0 auto;
     display: flex;
-    height: 49%;
+    align-items: flex-end;
+    font-size: 130%;
 }
 
-.topTaxi {
-    background-color: #FAECD6;
-    height: 95%;
+.menuLeft{
+}
+
+.menuLeftLink {
+    text-decoration: none;
+    text-align: right;
+    color: inherit;
+}
+
+.menuCenter {
     width: 30%;
     margin: 0 auto;
     text-align: center;
 }
 
-.topTaxi p{
-    font-size: 40px;
-    margin: 0;
+.menuCenterLink {
+    text-decoration: none;
+    color: inherit;
+    font-size: 140%;
 }
 
-.taxiMenu {
-    background-color: #F2DEBA;
-    width: 90%;
-    height: 100%;
-    margin: 4% auto;
-    text-align: center;
+.menuRight {
 }
 
-.menuTaxi {
-    font-size: 30px;
+.menuRightLink {
+    text-align: right;
     color: inherit;
     text-decoration: none;
 }
 
-.menuTaxi:hover {
-    color: #ffffff;
-}
-
-.waitPeople {
-    background-color: #FAECD6 !important;
-    width: 80%;
-    text-align: center;
-    margin: 0 auto;
-    padding: 0.01% 0;
-}
-
-.waitindex {
-    text-align: center;
-}
-
-.waitname {
-    float: left;
-    margin-left: 5%;
-}
-
-.waitcontact {
-    margin-left: 70%;
-    color: inherit;
-    text-decoration: none;
-}
-
-.waitcontact:hover{
-    color: #ffffff;
-}
-
-.matchbg {
-    text-align: center;
-}
-
-.matchbg h1{
-    padding-top: 10%;
-}
-
-.matchbutton {
-    
-    font-size: 40px;
-    color: inherit;
-    text-decoration: none;
-}
-
-.matchbutton:hover{
-    color:#ffffff;
-}
-
-.matchPeople {
-    background-color: #FAECD6;
-    height: 38%;
-    width: 50%;
-    margin: 5% 5%;
-    text-align: center;
-}
-
-.matchindex {
-    display: flex;
-    height: 49%;
-}
-
-.mypagep {
-    font-size: 30px;
-    text-align: center;
-}
-
-.userIndex {
-    background-color: #FAECD6;
-    height: 38%;
-    width: 50%;
-    margin: 2% 0;
-    text-align: center;
-}
-
-.userall {
-    display: flex;
-    height: 49%;
-}
-
-.notuserIndex {
-    background-color: #FAECD6;
-    height: 38%;
-    width: 100%;
-    margin: 7% 0;
-    text-align: center;
-}
-
-.editbg{
-    background-color: rgb(0, 0, 0,0);
-    width: 70%;
-    margin:  0 auto;
-    padding: 5%;
-}
-
-.editerbg {
-    background-color: #F2DEBA;
-    margin: 5% auto;
-    width: 80%;
-    height: 80%menu;
-    font-size: 35px;
-    text-align: center;
-}
-
-.contactbg {
-    text-align: center;
-}
-
-.talkusers {
-    background-color: #FAECD6;
-    margin: 0 auto;
-    width: 80%;
-    height: 10%;
-    position: relative;
-}
-
-.talkinuserslink{
-    position: absolute;
-    top: 50%;
-    left: 10%;
-    margin: -25px 0 0 -25px;
-    color: inherit;
-    text-decoration: none;
-}
-
-.talkinuserslink:hover {
-    color: #ffffff;
-}
-
-.talkuserslink{
-    position: absolute;
-    top: 50%;
-    left: 80%;
-    margin: -25px 0 0 -25px;
-    color: inherit;
-    text-decoration: none;
-}
-
-.talkuserslink:hover{
-    color: #ffffff;
-}
-
-.talkindexbg {
-
-    height:100%;
-    text-align: center;
+.menuRightLink:hover,
+.menuLeftLink:hover{
+    color: #576F72;
 }

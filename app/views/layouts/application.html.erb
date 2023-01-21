@@ -9,27 +9,26 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-
   <body>
-    <%if flash[:error] != nil%>
-    <div oneclick="flash()" id="flash">
-    <p><%= flash[:error] %></p>
-    </div>
-    <%end%>
-    <div class="header">
-      <%= image_tag "logo.png", size: "100x100" , action: "/home/top"%>
-      <%= link_to "SFC NETWORK", "/home/top", class: "menuTop" %>
-      <%if session[:id] != nil %>
-      <%= link_to "#{@user.name}'sPAGE", "/user/#{session[:id]}", class: " menu" %>
-      <%= link_to "MESSAGE", "/user/talk/index", class: " menu" %>
-      <%else%>
-      <%= link_to "SIGNUP", "/user/new",class: " menu" %>
-      <%= link_to "LOGIN", "/user/login", class: " menu" %>
+    <div>
+      <%if flash[:error] !=nil%>
+        <div oneclick="flash()" id="flash">
+          <p><%=flash[:error] %></p>
+        </div>
       <%end%>
-      <%= link_to "CONTACT", "/home/contact", class: " menu" %>
+    </div>
+    <div id ="header">
+      <div class="menuLeft">　<%=link_to "CONTACT" , "/home/contact" , class: "menuLeftLink" %></div>
+      <div class="menuCenter"><%=link_to "SFC NETWORK" , "/home/top" , class: "menuCenterLink" %></div>
+      <%if session[:id] !=nil %>
+        <div class="menuRight"><%=link_to "#{@user.name}'sPAGE" , "/user/#{session[:id]}" , class: "menuRightLink" %>　<%=link_to "MESSAGE" , "/user/talk/index" , class: "menuRightLink" %>　</div>
+      <%else%>
+        <div class="menuRight"><%=link_to "RESISTER" , "/user/new" , class: "menuRightLink" %>　<%=link_to "LOGIN" , "/user/login" , class: "menuRightLink" %>　</div>
+    <%end%>
     </div>
     <div class="pos">
       <%= yield %>
     </div>
   </body>
 </html>
+
