@@ -27,7 +27,7 @@ class UserController < ApplicationController
     #パスワードが正しい時
     if @loginuser.passward == params[:password]
       session[:id] = @loginuser.id;
-      redirect_to("/user/#{session[:id]}");
+      redirect_to"/user/#{session[:id]}" and return;
     else #パスワードが間違っているとき
       flash[:error] = "パスワードが間違っています"
       redirect_to "/user/login" and return;
@@ -51,18 +51,32 @@ class UserController < ApplicationController
 
   def create
     #新規User　作成
-    @user = User.new(name: params[:name], age: params[:age], mail: params[:mail], passward: params[:password], sex: params[:sex], taxi: false, rtaxi: false, talknum: 0, talktempnum: 0);
-    if @user.age != nil
-      flash[:error] = "通るよ！";
+    if User.find_by(name: params[:name]) != nil
+      flash[:error] = "既に登録されている名前です";
+      redirect_to "/user/new" and return
     end
+    if User.find_by(mail: params[:mail]) != nil
+      flash[:error] = "既に登録されているメールアドレスです";
+      redirect_to "/user/new" and return
+    end
+    if number?(params[:age]) == false
+      flash[:error] = "年齢は数字で入力してください"
+      redirect_to "/user/new" and return
+    end
+    if params[:age].to_i < 18
+      flash[:error] = "年齢は18歳以上にしてください"
+      redirect_to "/user/new" and return
+    end
+    @user = User.new(name: params[:name], age: params[:age], mail: params[:mail], passward: params[:password], sex: params[:sex], taxi: false, rtaxi: false, talknum: 0, talktempnum: 0);
     @user.save
     #もし登録がうまく行ったら
-    
     if @user.save
       session[:id] = @user.id;
-      redirect_to("/user/#{session[:id]}");
+      redirect_to "/user/#{session[:id]}" and return;
+    else
+      flash[:error] = "全ての項目を入力してください"
+      redirect_to "/user/new" and return
     end
-    flash[:error] = "通るよ！"
   end
 
   def mypage
@@ -70,6 +84,10 @@ class UserController < ApplicationController
     if !@pageuser
       flash[:error] = "存在しないページです";
       redirect_to("/home/top");
+    end
+    @password = "";
+    for x in @user.passward.chars
+      @password += "*";
     end
   end
 
@@ -87,6 +105,22 @@ class UserController < ApplicationController
       flash[:error] = "不正なアクセスを検出しました";
       redirect_to "/home/top" and return;
     else
+      if User.find_by(name: params[:name]) != nil
+        flash[:error] = "既に登録されている名前です";
+        redirect_to "/user/#{@user.id}/edit" and return
+      end
+      if User.find_by(mail: params[:mail]) != nil
+        flash[:error] = "既に登録されているメールアドレスです";
+        redirect_to "/user/#{@user.id}/edit" and return
+      end
+      if number?(params[:age]) == false
+        flash[:error] = "年齢は数字で入力してください"
+        redirect_to "/user/#{@user.id}/edit" and return
+      end
+      if params[:age].to_i < 18
+        flash[:error] = "年齢は18歳以上にしてください"
+        redirect_to "/user/#{@user.id}/edit" and return
+      end
       #編集内容の更新
       @user.name = params[:name];
       @user.age = params[:age];
@@ -204,5 +238,10 @@ class UserController < ApplicationController
       #@usersの重複削除
       @users.uniq;
     end
+  end
+
+  def number?(str)
+    # 文字列の先頭(\A)から末尾(\z)までが「0」から「9」の文字か
+    nil != (str =~ /\A[0-9]+\z/)
   end
 end

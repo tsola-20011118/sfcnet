@@ -1,0 +1,100 @@
+# modelの用途と全体像
+
+
+## <br>User
+***
+##### ユーザーの管理に利用
+| カラム名     | 型          | 利用用途      | 特記事項 |
+|:----------:|:-----------:|:------------:|:-:|
+| age        | integer     | 年齢を記録 | 18歳以下NG(未入力NG)|
+| mail       | string      | メールアドレスを記録|　他ユーザーとの重複NG(未入力NG)|
+| passward   | string      | パスワードを記録　|(未入力NG)|
+| sex        | integer     | 性別を記録 |0:女、1:男(未入力NG)|
+| name       | string      | 名前を記録 | (未入力NG)|
+| taxi       | boolean     | タクシーを待っているかのflag |湘南台からSFC(初期値false)|
+| rtaxi      | boolean     | タクシーを待っているかのflag |SFCから湘南台(初期値false)|
+| talknum    | integer     | 会話したことのある人数 |初期値0|
+| talknum    | integer     | 一時的に利用 |初期値0|
+##### id,created_at,update_atは省略
+
+
+
+## <br><br>Taxiconnect, Rtaxiconnect
+***
+##### 相乗りに誘った、誘われた情報の管理
+##### Taxiconnectは湘南台からSFC,RtaxiconnectはSFCから湘南台
+| カラム名     | 型          | 利用用途      | 特記事項 |
+|:----------:|:-----------:|:------------:|:-:|
+| to         | integer     | 相乗りを誘われたUserのidを記録 | なし　|
+| from       | integer     | 相乗りを誘ったUserのidを記録　|　なし　|
+##### id,created_at,update_atは省略
+
+
+
+## <br><br>Talkflag
+***
+##### 会話したことのあるユーザーの管理
+##### firstもしくはsecondのどちらかにsession[:id]が入る
+| カラム名     | 型          | 利用用途      | 特記事項 |
+|:----------:|:-----------:|:------------:|:-:|
+| first      | integer     | 会話したことのあるuserのid | 小さい方　|
+| second     | integer     | 会話したことのあるuserのid　|　大きい方　|
+##### id,created_at,update_atは省略
+
+
+
+## <br><br>Talk
+***
+##### 会話したことのあるユーザーとの会話内容
+##### fromにsession[:id]が入る
+| カラム名     | 型          | 利用用途      | 特記事項 |
+|:----------:|:-----------:|:------------:|:-:|
+| to      | integer     | メッセージを送られた側のuser.id | なし　|
+| from     | integer     | メッセージを送った側のuser.id　|　=session[:id]　|
+| message      | string     | メッセージ内容 | nilはNG　|
+| flag     | integer     | メッセージに紐づいたid　|　Talkflag.idと同期　|
+##### id,created_at,update_atは省略
+
+
+# <br><br><br>それぞれの動き
+
+
+## <br><br>"home/top", "/"
+***
+#### ログインユーザー、未ログインユーザー
+##### homeページへの遷移
+```mermaid
+sequenceDiagram
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->>+ hc : top
+    hc ->>+ db : session[:id]取得
+    db ->>- hc :session[:id]結果
+    hc ->>- u　: home/topHTML表示
+    alt session[:id] == nil
+        Note over u : LOGINとRESISTER表示
+    else session[:id] != nil
+        Note over u : MYPAGEとMESSAGE表示
+    end
+    
+
+```
+
+## <br><br>"home/contact"
+***
+#### ログインユーザー、未ログインユーザー
+##### コンタクトページへの遷移
+```mermaid
+sequenceDiagram
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> hc : contact
+    hc ->> u　: home/contactHTML表示
+
+```
