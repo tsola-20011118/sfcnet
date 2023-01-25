@@ -188,8 +188,11 @@ class UserController < ApplicationController
           des.destroy;
         }
         @user.taxi = false;
-        @user.save;
         @touser.taxi = false;
+        # @user.talknum = @user.talknum + 1;
+        # @user.talktempnum = @user.talktempnum + 1;
+        @user.save;
+        @touser.talknum = @touser.talknum + 1;
         @touser.save;
         flash[:error] = "マッチングしました！待ち合わせ場所を決めましょう！"
       end
@@ -197,7 +200,8 @@ class UserController < ApplicationController
       if @talkflag
         @flag = @talkflag.id;
         #メッセージ一覧を最新から５個@messageに格納
-        @messages = (Talk.where(flag: @flag).order(created_at: :desc).limit(5));
+        @testmessages = Talk.where(flag: @flag).order(created_at: :desc).limit(1);
+        @messages = (Talk.where(flag: @flag).order(created_at: :desc));
         #メッセージが送信されている場合に新しいTalkを作る
         if params[:message] != nil
           @new = Talk.new(to:@touser.id, from:@user.id, message:params[:message], flag: @flag)
@@ -205,12 +209,6 @@ class UserController < ApplicationController
         end
       else #Talkflagがない時talkflagを作る
         Talkflag.new(first: @first, second:@second).save;
-        @user.talknum = @user.talknum + 1;
-        @user.talktempnum = @user.talktempnum + 1;
-        @user.save;
-        @touser.talknum = @touser.talknum + 1;
-        @touser.save;
-
         @messages = (Talk.where(flag: @flag).order(created_at: :desc).limit(5));
       end
     end

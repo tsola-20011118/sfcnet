@@ -56,45 +56,892 @@
 ##### id,created_at,update_atは省略
 
 
-# <br><br><br>それぞれの動き
+# <br><br><br>controllerの関係性
 
 
-## <br><br>"home/top", "/"
+## "home/top", "/"
 ***
-#### ログインユーザー、未ログインユーザー
-##### homeページへの遷移
+#### home#top
 ```mermaid
 sequenceDiagram
+    autonumber
     participant u as ユーザー
     participant uc as Usercontroller
     participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant rc as Rtaxicontroller
     participant hc as Homecontroller
     participant db as Database
     u ->>+ hc : top
+    rect rgba(0, 0, 0, 0.3)
+    Note over hc : topactionSTART
     hc ->>+ db : session[:id]取得
-    db ->>- hc :session[:id]結果
-    hc ->>- u　: home/topHTML表示
+    db ->>- hc :　結果
     alt session[:id] == nil
-        Note over u : LOGINとRESISTER表示
+        hc ->> u : home/topHTML(LOGINとRESISTER表示)
     else session[:id] != nil
-        Note over u : MYPAGEとMESSAGE表示
+        hc ->> u : home/topHTML(MYPAGEとMESSAGE表示)
     end
+    Note over hc : topactionEND
+    end
+    
+    hc ->>- u　: home/topHTML表示
     
 
 ```
 
-## <br><br>"home/contact"
+## <br>"home/contact"
 ***
-#### ログインユーザー、未ログインユーザー
-##### コンタクトページへの遷移
+#### home#contact
 ```mermaid
 sequenceDiagram
+    autonumber
     participant u as ユーザー
     participant uc as Usercontroller
     participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant rc as Rtaxicontroller
     participant hc as Homecontroller
     participant db as Database
-    u ->> hc : contact
-    hc ->> u　: home/contactHTML表示
+    u ->>+ hc : contact
+    rect rgba(0, 0, 0, 0.3)
+    Note over hc : contactActionSTART
+    Note over hc : contactActionEND
+    end
+    hc ->>- u　: home/contactHTML
+
+```
+
+## <br>"user/login"
+***
+#### user#login
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->>+ uc : login
+    rect rgba(0, 0, 0, 0.3)
+    Note over uc : loginActionSTART
+    Note over uc : loginActionEND
+    end
+    uc ->>- u　: user/loginHTML
+    Note over u : フォームに入力後<br>RESISTERボタン押す
+    u ->>+ uc : logined
+    
+
+```
+
+## <br>"user/logined"
+***
+#### user#logined
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> uc : logined
+    rect rgba(0, 0, 0, 0.3)
+    Note over uc : loginedActionSTART
+    uc ->> db : 既にログイン済みかの確認
+    db ->> uc : 結果
+    opt ログイン済み
+    uc ->> u : error/html/loginHTML
+    end
+    Note over uc : パスワード照合
+    opt パスワード間違い
+        uc ->> u : error/user/loginHTML
+    end
+    Note over uc : ログイン情報の登録
+    Note over uc : loginedActionEND
+    end
+    opt ログイン成功
+        uc ->> u : user/:idHTML
+    end
+    
+```
+
+## <br>"user/:id"
+***
+#### user#mypage
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->>+ uc : :id
+    rect rgba(0, 0, 0, 0.3)
+    Note over uc : mypageActionSTART
+    uc ->> db : User.id = params[:id]となるユーザー情報取得
+    db ->> uc : 結果
+    opt 該当ユーザーなし
+    uc ->> u : error/home/topHTML
+    end
+    Note over uc : パスワードの伏字化
+    Note over uc : mypageActionEND
+    end
+    uc ->>- u : user/mypageHTML表示
+
+```
+
+## <br>"user/:id/edit"
+***
+#### user#edit
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->>+ uc : edit
+    rect rgba(0, 0, 0, 0.3)
+    Note over uc : editActionSTART
+    uc ->> db : 編集ユーザーの情報取得
+    db ->> uc : 結果
+    Note over uc : 編集ユーザーとログインユーザーが同一どうかの確認
+    Note over uc : ログインユーザーであるかの確認
+    opt 異なった場合<br>未ログインユーザーだった場合
+    uc ->> u : error/home/topHTML
+    end
+    Note over uc : editActionEND
+    end
+    uc ->>- u　: user/:id/editHTML表示
+    Note over u : buttonを押す
+    u ->> uc　: editer
+```
+
+## <br>"user/:id/editer"
+***
+#### user#editer
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> uc : editer
+    rect rgba(0, 0, 0, 0.3)
+    Note over uc : editerActionSTART
+    Note over uc : 編集ユーザーとログインユーザーが同一どうかの確認
+    Note over uc : ログインユーザーであるかの確認
+    opt 異なった場合<br>未ログインユーザーだった場合
+    uc ->> u : error/home/topHTML
+    end
+    opt 編集内容が問題ないかの確認
+    Note over uc : 名前の他のユーザーとの重複確認
+    Note over uc : メールの他のユーザーとの重複確認
+    Note over uc : 年齢の書式の問題確認
+    Note over uc : 年齢の範囲の問題確認
+    opt エラー発生
+    uc ->> u : error/user/editHTML
+    end
+    end
+    uc ->> db : 編集内容の送信
+    db ->> uc : 結果
+    opt 失敗
+    uc ->> u : error/user/editHTML
+    end
+    Note over uc : editerActionEND
+    end
+    opt 成功
+    uc -> u : user/:idHTML
+    end
+```
+
+## <br>"user/:id/destroy"
+***
+#### user#destroy
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->>+ uc : destroy
+    rect rgba(0, 0, 0, 0.3)
+    Note over uc : destroyActionSTART
+    Note over uc : 削除ユーザーとログインユーザーが同一どうかの確認
+    Note over uc : ログインユーザーであるかの確認
+    opt 異なった場合<br>未ログインユーザーだった場合
+    uc ->> u : error/home/topHTML
+    end
+    Note over uc : ログイン情報の抹消<br>session[:id]= nil
+    Note over uc : ユーザー情報の削除
+    Note over uc : destroyActionEND
+    end
+    uc ->>- u　: home/topHTML
+```
+
+## <br>"user/new"
+***
+#### user#new
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> uc : new
+
+    rect rgba(0, 0, 0, 0.3)
+    Note over uc : newActionSTART
+    Note over uc : newActionEND
+    end
+    uc ->> u　: user/newHTML
+    Note over u : buttonを押す
+    u ->> uc　: create
+```
+
+## <br>"user/create"
+***
+#### user#create
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> uc : create
+    rect rgba(0, 0, 0, 0.3)
+    Note over uc : createActionSTART
+    opt 新規作成内容が問題ないかの確認
+    Note over uc : 名前の他のユーザーとの重複確認
+    Note over uc : メールの他のユーザーとの重複確認
+    Note over uc : 年齢の書式の問題確認
+    Note over uc : 年齢の範囲の問題確認
+    opt エラー発生
+    uc ->> u : error/user/createHTML
+    end
+    end
+    uc ->> db : 新規登録内容の送信
+    db ->> uc : 結果
+    opt 失敗
+    uc ->> u : error/user/newHTML
+    end
+    Note over uc : ログイン情報の登録
+    Note over uc : createActionEND
+    end
+    uc ->> u　: user/:idHTML表示
+```
+
+## <br>"user/logout"
+***
+#### user#logout
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> uc : logout
+    rect rgba(0, 0, 0, 0.3)
+    Note over uc : logoutActionSTART
+    Note over uc : 未ログインユーザーか確認
+    opt 未ログインユーザーの場合
+    uc ->> u : error/user/loginHTML
+    end
+    Note over uc : ログイン情報の削除
+    Note over uc : logoutActionEND
+    end
+    uc ->> u　: home/top表示
+```
+
+## <br>"user/talk/index"
+***
+#### user#talkindex
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> uc : talkindex
+    rect rgba(0, 0, 0, 0.3)
+    Note over uc : talkindexActionSTART
+    Note over uc : 未ログインユーザーか確認
+    opt 未ログインユーザーの場合
+    uc ->> u : error/user/loginHTML
+    end
+    uc ->> db : ログインユーザーと関係するtalkflagの情報取得
+    db ->> uc : 結果
+    Note over uc : ログインユーザーと会話履歴のあるUserのidを格納
+    Note over uc : talkindexActionEND
+    end
+    uc ->> u　: user/talk/index表示
+```
+
+## <br>"user/talk/:id"
+***
+#### user#talk
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> uc : talk
+    rect rgba(0, 0, 0, 0.3)
+    Note over uc : talkActionSTART
+    Note over uc : 未ログインユーザーか確認
+    opt 未ログインユーザーの場合
+    uc ->> u : error/user/loginHTML
+    end
+    Note over uc : 存在しないページか確認
+    opt 存在しないページの場合
+    uc ->> u : error/home/topHTML
+    end
+    uc ->> db : ログインユーザーと会話しているUserの情報取得
+    db ->> uc : 結果
+    opt 存在しないユーザーの場合
+    uc ->> u : error/home/topHTML
+    end
+    Note over uc : ログインユーザーと相手ユーザーのTalkflagを取得
+    opt アクセスできないユーザーの場合（会話したことがなく、マッチングもしていない）
+    uc ->> u : error/home/topHTML
+    end
+    opt マッチング成立時の場合
+    uc ->> db : ログインユーザーと相手ユーザーの関係するTaxiconnectを削除
+    uc ->> db : ログインユーザーのtaxiをfalseに
+    uc ->> db : 相手ユーザーのtaxiをfalseに
+    uc ->> db : 相手ユーザーのtalknumを+1する
+    Note over uc : マッチングを通知するflashの作成
+    end
+    alt マッチング履歴が残っている時
+    uc ->> db :ログインユーザーと相手ユーザーのメッセージ内容を取得
+    db ->> uc  : 結果を格納
+    opt 新しくメッセージが送信されたとき
+    uc ->> db :ログインユーザーと相手ユーザーのTalkを新規作成
+    end
+    else 初マッチングの時
+    uc ->> db :ログインユーザーと相手ユーザーのメッセージ内容に紐づけるためのTalkflagを作る
+    uc ->> db :ログインユーザーと相手ユーザーのメッセージ内容を取得
+    db ->> uc  : 結果を格納
+    end
+    Note over uc : talkActionEND
+    end
+    uc ->> u　: user/talk/index表示
+    Note over u : buttonを押す
+    u ->> uc : talk/:id(新しくメッセージが送信されたときに該当)
+```
+
+## <br>"taxi/wait"
+***
+#### taxi#wait
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> tc : wait
+    rect rgba(0, 0, 0, 0.3)
+    Note over tc : waitActionSTART
+    Note over tc : 未ログインユーザーか確認
+    opt 未ログインユーザーの場合
+    tc ->> u : error/user/loginHTML
+    end
+    tc ->> db : ログインユーザーのtaxiをtrueにする
+    Note over tc : waitActionEND
+    end
+    tc ->> u : home/topHTML
+```
+
+## <br>"taxi/exit"
+***
+#### taxi#exit
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> tc : exit
+    rect rgba(0, 0, 0, 0.3)
+    Note over tc : exitActionSTART
+    Note over tc : 未ログインユーザーか確認
+    opt 未ログインユーザーの場合
+    tc ->> u : error/user/loginHTML
+    end
+    tc ->> db : ログインユーザーのtaxiをfalseにする
+    tc ->> db : ログインユーザーの関連するTaxiconnectを全て削除
+    Note over tc : exitActionEND
+    end
+    tc ->> u : home/topHTML
+```
+
+## <br>"taxi/waiting"
+***
+#### taxi#waiting
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> tc : waiting
+    rect rgba(0, 0, 0, 0.3)
+    Note over tc : waitingActionSTART
+    Note over tc : 未ログインユーザーか確認
+    opt 未ログインユーザーの場合
+    tc ->> u : error/user/loginHTML
+    end
+    tc ->> db : user.taxiがtrueのuserを取得
+    db ->> tc : 結果
+    Note over tc : waitingActionEND
+    end
+    tc ->> u : taxi/waitingHTML
+```
+
+## <br>"taxi/connect/:id"
+***
+#### taxi#connect
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> tc : connect
+    rect rgba(0, 0, 0, 0.3)
+    Note over tc : connectActionSTART
+    Note over tc : 未ログインユーザーか確認
+    opt 未ログインユーザーの場合
+    tc ->> u : error/user/loginHTML
+    end
+    Note over tc : アクセスできないユーザーか確認
+    opt アクセスできないユーザーの場合
+    tc ->> u : error/home/topHTML
+    end
+    tc ->> db : id=params[:id]のuserを取得
+    db ->> tc : 結果
+    Note over tc : connectActionEND
+    end
+    tc ->> u : taxi/connectHTML
+```
+
+## <br>"taxi/match/:id"
+***
+#### taxi#match
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> tc : match
+    rect rgba(0, 0, 0, 0.3)
+    Note over tc : matchActionSTART
+    Note over tc : 未ログインユーザーか確認
+    opt 未ログインユーザーの場合
+    tc ->> u : error/user/loginHTML
+    end
+    Note over tc : アクセスできないユーザーか確認
+    opt アクセスできないユーザーの場合
+    tc ->> u : error/home/topHTML
+    end
+    alt （相手がtaxi=trueにした時から）誘ったことがないユーザーの場合
+    tc ->> db : ログインユーザー->該当ユーザーのTaxiconnectの作成
+    alt 相手から誘われていた時
+    tc ->> u : user/talk/:idHTML
+    else 相手から誘われていない時
+    Note over tc : 承認待ちのflash作成
+    tc ->> u : taxi/waiting
+    end
+    else
+    tc ->> u : error/taxi/waitingHTML
+    end
+    Note over tc : matchActionEND
+    end
+```
+
+## <br>"taxi/check"
+***
+#### taxi#check
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> tc : check
+    rect rgba(0, 0, 0, 0.3)
+    Note over tc : checkActionSTART
+    Note over tc : 未ログインユーザーか確認
+    opt 未ログインユーザーの場合
+    tc ->> u : error/user/loginHTML
+    end
+    Note over tc : アクセスできないユーザーか確認
+    opt アクセスできないユーザーの場合
+    tc ->> u : error/home/topHTML
+    end
+    tc ->> db : 宛先ログインユーザーのTaxiconnectを取得
+    db ->> tc : 結果
+    Note over tc : 差し出し相手ユーザーのidを格納
+    Note over tc : checkActionEND
+    end
+    tc ->> u : taxi/checkHTML
+```
+
+## <br>"taxi/checkD/:id"
+***
+#### taxi#checkD
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> tc : checkD
+    rect rgba(0, 0, 0, 0.3)
+    Note over tc : checkDActionSTART
+    Note over tc : 未ログインユーザーか確認
+    opt 未ログインユーザーの場合
+    tc ->> u : error/user/loginHTML
+    end
+    Note over tc : アクセスできないユーザーか確認
+    opt アクセスできないユーザーの場合
+    tc ->> u : error/home/topHTML
+    end
+    tc ->> db : 差し出し相手ユーザーのUserを取得
+    db ->> tc : 結果
+    Note over tc : アクセスできないユーザーか確認
+    opt アクセスできないユーザーの場合
+    tc ->> u : error/home/topHTML
+    end
+    tc ->> db : 差出人ログインユーザー、宛先相手ユーザーのTaxiconnectの作成
+    Note over tc : checkDActionEND
+    end
+    tc ->> u : user/talk/:idHTML
+```
+
+## <br>"rtaxi/wait"
+***
+#### rtaxi#wait
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> rc : wait
+    rect rgba(0, 0, 0, 0.3)
+    Note over rc : waitActionSTART
+    Note over rc : 未ログインユーザーか確認
+    opt 未ログインユーザーの場合
+    rc ->> u : error/user/loginHTML
+    end
+    rc ->> db : ログインユーザーのrtaxiをtrueにする
+    Note over rc : waitActionEND
+    end
+    rc ->> u : home/topHTML
+```
+
+## <br>"rtaxi/exit"
+***
+#### rtaxi#exit
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> rc : exit
+    rect rgba(0, 0, 0, 0.3)
+    Note over rc : exitActionSTART
+    Note over rc : 未ログインユーザーか確認
+    opt 未ログインユーザーの場合
+    rc ->> u : error/user/loginHTML
+    end
+    rc ->> db : ログインユーザーのrtaxiをfalseにする
+    rc ->> db : ログインユーザーの関連するRtaxiconnectを全て削除
+    Note over rc : exitActionEND
+    end
+    rc ->> u : home/topHTML
+```
+
+## <br>"rtaxi/waiting"
+***
+#### rtaxi#waiting
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> rc : waiting
+    rect rgba(0, 0, 0, 0.3)
+    Note over rc : waitingActionSTART
+    Note over rc : 未ログインユーザーか確認
+    opt 未ログインユーザーの場合
+    rc ->> u : error/user/loginHTML
+    end
+    rc ->> db : user.rtaxiがtrueのuserを取得
+    db ->> rc : 結果
+    Note over rc : waitingActionEND
+    end
+    rc ->> u : rtaxi/waitingHTML
+```
+
+## <br>"rtaxi/connect/:id"
+***
+#### rtaxi#connect
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> rc : connect
+    rect rgba(0, 0, 0, 0.3)
+    Note over rc : connectActionSTART
+    Note over rc : 未ログインユーザーか確認
+    opt 未ログインユーザーの場合
+    rc ->> u : error/user/loginHTML
+    end
+    Note over rc : アクセスできないユーザーか確認
+    opt アクセスできないユーザーの場合
+    rc ->> u : error/home/topHTML
+    end
+    rc ->> db : id=params[:id]のuserを取得
+    db ->> rc : 結果
+    Note over rc : connectActionEND
+    end
+    rc ->> u : rtaxi/connectHTML
+```
+
+## <br>"rtaxi/match/:id"
+***
+#### rtaxi#match
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> rc : march
+    rect rgba(0, 0, 0, 0.3)
+    Note over rc : marchActionSTART
+    Note over rc : 未ログインユーザーか確認
+    opt 未ログインユーザーの場合
+    rc ->> u : error/user/loginHTML
+    end
+    Note over rc : アクセスできないユーザーか確認
+    opt アクセスできないユーザーの場合
+    rc ->> u : error/home/topHTML
+    end
+    alt （相手がrtaxi=trueにした時から）誘ったことがないユーザーの場合
+    rc ->> db : ログインユーザー->該当ユーザーのRtaxiconnectの作成
+    alt 相手から誘われていた時
+    rc ->> u : user/talk/:idHTML
+    else 相手から誘われていない時
+    Note over rc : 承認待ちのflash作成
+    rc ->> u : rtaxi/waiting
+    end
+    else
+    rc ->> u : error/rtaxi/waitingHTML
+    end
+    Note over rc : matchActionEND
+    end
+```
+
+## <br>"rtaxi/check"
+***
+#### rtaxi#check
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant tc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> rc : check
+    rect rgba(0, 0, 0, 0.3)
+    Note over rc : checkActionSTART
+    Note over rc : 未ログインユーザーか確認
+    opt 未ログインユーザーの場合
+    rc ->> u : error/user/loginHTML
+    end
+    Note over rc : アクセスできないユーザーか確認
+    opt アクセスできないユーザーの場合
+    rc ->> u : error/home/topHTML
+    end
+    rc ->> db : 宛先ログインユーザーのRtaxiconnectを取得
+    db ->> rc : 結果
+    Note over rc : 差し出し相手ユーザーのidを格納
+    Note over rc : checkActionEND
+    end
+    rc ->> u : rtaxi/checkHTML
+```
+
+## <br>"rtaxi/checkD/:id"
+***
+#### rtaxi#checkD
+```mermaid
+sequenceDiagram
+    autonumber
+    participant u as ユーザー
+    participant uc as Usercontroller
+    participant rc as Taxicontroller
+    participant rc as Rtaxicontroller
+    participant hc as Homecontroller
+    participant db as Database
+    u ->> rc : checkD
+    rect rgba(0, 0, 0, 0.3)
+    Note over rc : checkDActionSTART
+    Note over rc : 未ログインユーザーか確認
+    opt 未ログインユーザーの場合
+    rc ->> u : error/user/loginHTML
+    end
+    Note over rc : アクセスできないユーザーか確認
+    opt アクセスできないユーザーの場合
+    rc ->> u : error/home/topHTML
+    end
+    rc ->> db : 差し出し相手ユーザーのUserを取得
+    db ->> rc : 結果
+    Note over rc : アクセスできないユーザーか確認
+    opt アクセスできないユーザーの場合
+    rc ->> u : error/home/topHTML
+    end
+    rc ->> db : 差出人ログインユーザー、宛先相手ユーザーのRtaxiconnectの作成
+    Note over rc : checkDActionEND
+    end
+    rc ->> u : user/talk/:idHTML
+```
+
+
+# <br><br><br>urlの関係性
+#### URL直接入力を用いない移動
+```mermaid
+stateDiagram-v2
+ home(unlogin) --> user/new
+ home(unlogin) --> user/login
+
+ user/login --> user/id
+ user/new --> user/id
+ user/login --> home(unlogin)
+ user/new --> home(unlogin)
+ home/contact --> home(unlogin)
+
+ home(login) --> user/id
+ home(login) --> user/talk/index
+ home(login) --> taxi/waiting
+ home(login) --> taxi/check
+
+ user/id --> home(unlogin)
+ 
+ 
+ user/id --> user/id/edit
+ 
+ taxi/waiting --> taxi/connect/id
+ taxi/connect/id --> user/talk/id
+ user/talk/index --> user/talk/id
+ 
+ taxi/check --> taxi/checkD/id
+ taxi/checkD/id --> user/talk/id
+
+ taxi/check --> user/id
+ taxi/checkD/id --> user/id
+ taxi/connect/id --> user/id
+ user/talk/id --> user/id
+ user/id/edit --> user/id
+ user/talk/index --> user/id
+
+ taxi/check --> user/talk/index
+ taxi/checkD/id --> user/talk/index
+ taxi/connect/id --> user/talk/index
+ user/talk/id --> user/talk/index
+ user/id/edit --> user/talk/index
+
+ taxi/check --> home/contact
+ taxi/checkD/id --> home/contact
+ taxi/connect/id --> home/contact
+ user/talk/id --> home/contact
+ user/id/edit --> home/contact
+ user/talk/index --> home/contact
+ home(unlogin) --> home/contact
+ user/login --> home/contact
+ user/new --> home/contact
+
+ taxi/check --> home(login)
+ taxi/checkD/id --> home(login)
+ taxi/connect/id --> home(login)
+ user/talk/id --> home(login)
+ user/talk/index -->home(login)
+ user/id/edit --> home(login)
 
 ```

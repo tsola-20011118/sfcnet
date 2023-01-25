@@ -1,12 +1,6 @@
-<div class="loginbg">
+<div class="topAll">
+    <div class="talkuser"><p><%= @touser.name %></p></div>
     <div class="talkindexbg">
-        <h1 class="mypagep"><%= @touser.name %></h1>
-        
-            <div class="talkusers">
-                <% for @textData in @messages%>
-                <%= User.find_by(id:@textData.from).name %><%= @textData.message %>
-                <%end%>
-            </div>
         <form action="" method="GET">
             <div>
                 <textarea name="message"></textarea>
@@ -15,5 +9,17 @@
                 <button>送信</button>
             </div>
         </form>
+    </div>
+    <div class="talkusers">
+        <% for @textData in @messages%>
+            <div class="message">
+                <%if @textData.from == session[:id]%>
+                    <div class="messagenameA"><%= User.find_by(id:@textData.from).name %></div>
+                <%else%>
+                    <div class="messagenameB"><%= User.find_by(id:@textData.from).name %></div>
+                <%end%>
+                <div class="messagetext"><%= @textData.message %></div>
+            </div>
+        <%end%>
     </div>
 </div>

@@ -29,14 +29,6 @@ Rails.application.routes.draw do
   get "taxi/wait" => "taxi#wait" #待機状態にする、画面表示なし
   # get "taxi" => "taxi#taxi"　使わない？
 
-  get "rtaxi/exit" => "taxi#exit" #タクシーを諦めるページ
-  get "rtaxi/checkD/:id" => "taxi#checkD"#誘われた人から承認したあとのページ（未完成,未検証）
-  get "rtaxi/check" => "taxi#check"#誘われた人から承認するページ
-  get "rtaxi/match/:id" => "taxi#match" #誘うか確定した後のページ
-  get "rtaxi/connect/:id" => "taxi#connect" #誘うか選択するページ
-  get "rtaxi/waiting" => "taxi#waiting" #待機している人一覧の表示ページ
-  get "rtaxi/wait" => "taxi#wait" #待機状態にする、画面表示なし
-  # get "taxi" => "taxi#taxi"　使わない？
 
   get "home/contact" => "home#contact"#contactページ
   get "home/top" => "home#top" #topページ
