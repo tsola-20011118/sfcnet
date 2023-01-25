@@ -662,3 +662,9 @@ body {
 
     font-size: xx-large;
 }
+
+.messagetext{
+    overflow: auto;
+    height: 100%;
+    width: 79%;
+}

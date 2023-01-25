@@ -105,11 +105,11 @@ class UserController < ApplicationController
       flash[:error] = "不正なアクセスを検出しました";
       redirect_to "/home/top" and return;
     else
-      if User.find_by(name: params[:name]) != nil
+      if User.find_by(name: params[:name]) != nil && User.find_by(id: session[:id]).name != params[:name]
         flash[:error] = "既に登録されている名前です";
         redirect_to "/user/#{@user.id}/edit" and return
       end
-      if User.find_by(mail: params[:mail]) != nil
+      if User.find_by(mail: params[:mail]) != nil && User.find_by(id: session[:id]).mail != params[:mail]
         flash[:error] = "既に登録されているメールアドレスです";
         redirect_to "/user/#{@user.id}/edit" and return
       end
@@ -145,8 +145,33 @@ class UserController < ApplicationController
     if session[:id] == nil || params[:id].to_i != @user.id
       flash[:error] = "不正なアクセスを検出しました";
     else
-      session[:id] = nil;
+      
+      @talk = Talk.where(to:session[:id]).or(Talk.where(from:session[:id]))
+      if @talk
+        for x in @talk
+          x.destroy
+        end
+      end
+      @talk = Talkflag.where(first:session[:id]).or(Talkflag.where(second:session[:id]))
+      if @talk
+        for x in @talk
+          x.destroy
+        end
+      end
+      @taxi = Taxiconnect.where(to:session[:id]).or(Taxiconnect.where(from:session[:id]))
+      if @taxi
+        for x in @taxi
+          x.destroy
+        end
+      end
+      @taxi = Rtaxiconnect.where(to:session[:id]).or(Rtaxiconnect.where(from:session[:id]))
+      if @taxi
+        for x in @taxi
+          x.destroy
+        end
+      end
       @user.destroy;
+      session[:id] = nil;
     end
     redirect_to("/home/top");
   end
@@ -177,24 +202,47 @@ class UserController < ApplicationController
       end
       @talkflag = Talkflag.find_by(first: @first, second:@second);
       #エラー処理
-      if !Taxiconnect.find_by(to:params[:id], from:session[:id]) && !Taxiconnect.find_by(from:params[:id], to:session[:id]) && !@talkflag
-        flash[:error] = "アクセスできないユーザーです";
-        redirect_to "/home/top" and return;
+      if Taxiconnect.find_by(to:params[:id], from:session[:id]) || Taxiconnect.find_by(from:params[:id], to:session[:id])
+        if !Taxiconnect.find_by(to:params[:id], from:session[:id]) && !Taxiconnect.find_by(from:params[:id], to:session[:id]) && !@talkflag
+          flash[:error] = "アクセスできないユーザーです";
+          redirect_to "/home/top" and return;
+        end
+        #どちらも誘い合っている時のTaxiconnect削除（この時マッチングしている）
+        if Taxiconnect.find_by(to:params[:id], from:session[:id]) && Taxiconnect.find_by(from:params[:id], to:session[:id])
+          @temp = Taxiconnect.where(to:@user).or(Taxiconnect.where(from:@user.id)).or(Taxiconnect.where(from:@touser.id)).or(Taxiconnect.where(to:@touser.id));
+          @temp.each {|des|
+            des.destroy;
+          }
+          @user.taxi = false;
+          @touser.taxi = false;
+          # @user.talknum = @user.talknum + 1;
+          # @user.talktempnum = @user.talktempnum + 1;
+          @user.save;
+          @touser.talknum = @touser.talknum + 1;
+          @touser.save;
+          flash[:error] = "マッチングしました！待ち合わせ場所を決めましょう！"
+        end
       end
-      #どちらも誘い合っている時のTaxiconnect削除（この時マッチングしている）
-      if Taxiconnect.find_by(to:params[:id], from:session[:id]) && Taxiconnect.find_by(from:params[:id], to:session[:id])
-        @temp = Taxiconnect.where(to:@user).or(Taxiconnect.where(from:@user.id)).or(Taxiconnect.where(from:@touser.id)).or(Taxiconnect.where(to:@touser.id));
-        @temp.each {|des|
-          des.destroy;
-        }
-        @user.taxi = false;
-        @touser.taxi = false;
-        # @user.talknum = @user.talknum + 1;
-        # @user.talktempnum = @user.talktempnum + 1;
-        @user.save;
-        @touser.talknum = @touser.talknum + 1;
-        @touser.save;
-        flash[:error] = "マッチングしました！待ち合わせ場所を決めましょう！"
+      if Rtaxiconnect.find_by(to:params[:id], from:session[:id]) || Rtaxiconnect.find_by(from:params[:id], to:session[:id])
+        if !Rtaxiconnect.find_by(to:params[:id], from:session[:id]) && !Rtaxiconnect.find_by(from:params[:id], to:session[:id]) && !@talkflag
+          flash[:error] = "アクセスできないユーザーです";
+          redirect_to "/home/top" and return;
+        end
+        #どちらも誘い合っている時のRtaxiconnect削除（この時マッチングしている）
+        if Rtaxiconnect.find_by(to:params[:id], from:session[:id]) && Rtaxiconnect.find_by(from:params[:id], to:session[:id])
+          @temp = Rtaxiconnect.where(to:@user).or(Rtaxiconnect.where(from:@user.id)).or(Rtaxiconnect.where(from:@touser.id)).or(Rtaxiconnect.where(to:@touser.id));
+          @temp.each {|des|
+            des.destroy;
+          }
+          @user.taxi = false;
+          @touser.taxi = false;
+          # @user.talknum = @user.talknum + 1;
+          # @user.talktempnum = @user.talktempnum + 1;
+          @user.save;
+          @touser.talknum = @touser.talknum + 1;
+          @touser.save;
+          flash[:error] = "マッチングしました！待ち合わせ場所を決めましょう！"
+        end
       end
       #既にTalkflagがあるとき（これまでにマッチングしたことがある）チャット画面を表示
       if @talkflag

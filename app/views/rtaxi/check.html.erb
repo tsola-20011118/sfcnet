@@ -10,7 +10,7 @@
                             <p><%= User.find_by(id:@users).name%></p>
                         </div>
                         <div class="waitingUser waitingUserLink">
-                            <%= link_to "一緒に行く!", "/taxi/checkD/#{User.find_by(id: @users).id}", class: " menu" %>
+                            <%= link_to "一緒に行く!", "/rtaxi/checkD/#{User.find_by(id: @users).id}", class: " menu" %>
                         </div>
                     </div>
                 <%end%>
